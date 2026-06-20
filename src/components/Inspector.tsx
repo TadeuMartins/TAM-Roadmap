@@ -1,3 +1,4 @@
+import { Trash2 } from 'lucide-react'
 import type { Pain, ProcessMap, ProcessStep, Project } from '../core/types'
 import { scorePain } from '../core/validation'
 
@@ -95,7 +96,7 @@ export function Inspector({ project, process, selectedStepId, onProjectChange, o
             Notes
             <textarea value={selectedStep.notes || ''} onChange={(event) => patchStep({ notes: event.target.value })} placeholder="What did the TAM observe?" />
           </label>
-          <button className="danger" disabled={process.steps.length <= 1} onClick={deleteStep}>Delete process card</button>
+          <button className="danger icon-button" title="Delete process card" aria-label="Delete process card" disabled={process.steps.length <= 1} onClick={deleteStep}><Trash2 size={15} /></button>
           <div className="inspector-row">
             <strong>Pains on this step</strong>
             <button onClick={addPainToStep}>Add pain</button>

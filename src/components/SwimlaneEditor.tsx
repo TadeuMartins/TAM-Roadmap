@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react'
+import { Trash2 } from 'lucide-react'
 import {
   Background,
   Controls,
@@ -287,7 +288,7 @@ export function SwimlaneEditor({ process, pains, stakeholders, onProcessChange, 
               <div className="lane-actions">
                 <button onClick={() => moveLane(lane.id, -1)} disabled={index === 0}>Up</button>
                 <button onClick={() => moveLane(lane.id, 1)} disabled={index === process.lanes.length - 1}>Down</button>
-                <button className="danger" onClick={() => removeLane(lane.id)} disabled={process.lanes.length <= 1}>Remove</button>
+                <button className="danger icon-button" title="Delete swimlane" aria-label="Delete swimlane" onClick={() => removeLane(lane.id)} disabled={process.lanes.length <= 1}><Trash2 size={15} /></button>
               </div>
             </article>
           ))}
