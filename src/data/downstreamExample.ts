@@ -21,34 +21,6 @@ export const downstreamExample: Project = {
   ],
   processes: [
     {
-      id: 'proc-maint-as-is',
-      name: 'Critical flare asset maintenance to learning',
-      mode: 'as-is',
-      lanes: [
-        { id: 'lane-ops', label: 'Operations', ownerType: 'role', stakeholderId: 'st-ops' },
-        { id: 'lane-planning', label: 'Maintenance planning', ownerType: 'role', stakeholderId: 'st-maint' },
-        { id: 'lane-field', label: 'Field execution', ownerType: 'role', stakeholderId: 'st-maint' },
-        { id: 'lane-systems', label: 'Engineering / systems data', ownerType: 'system' },
-      ],
-      steps: [
-        { id: 's-m-1', label: 'FGRU, KOD or pilot issue observed', laneId: 'lane-ops', kind: 'activity', x: 70, y: 28, system: 'DCS alarm / operator log', painIds: ['p1', 'p2'] },
-        { id: 's-m-2', label: 'Create maintenance notification', laneId: 'lane-planning', kind: 'system', x: 285, y: 28, system: 'CMMS / SAP PM', painIds: ['p2'] },
-        { id: 's-m-3', label: 'Prioritize by availability, not flare risk', laneId: 'lane-planning', kind: 'decision', x: 500, y: 28, system: 'Spreadsheet / meetings', painIds: ['p3'] },
-        { id: 's-m-4', label: 'Search P&IDs, relief data and manuals', laneId: 'lane-systems', kind: 'document', x: 715, y: 28, system: 'Shared folders / PDFs', painIds: ['p4'] },
-        { id: 's-m-5', label: 'Check spares and field constraints', laneId: 'lane-planning', kind: 'decision', x: 930, y: 28, system: 'CMMS + calls', painIds: ['p5'] },
-        { id: 's-m-6', label: 'Execute intervention on critical asset', laneId: 'lane-field', kind: 'activity', x: 1145, y: 28, system: 'Paper notes / mobile photos', painIds: ['p6'] },
-        { id: 's-m-7', label: 'Close order with limited flare learning', laneId: 'lane-planning', kind: 'activity', x: 1360, y: 28, system: 'CMMS desktop', painIds: ['p7'] },
-      ],
-      edges: [
-        { id: 'e-m-1', source: 's-m-1', target: 's-m-2', label: 'notify' },
-        { id: 'e-m-2', source: 's-m-2', target: 's-m-3', label: 'prioritize' },
-        { id: 'e-m-3', source: 's-m-3', target: 's-m-4', label: 'need context' },
-        { id: 'e-m-4', source: 's-m-4', target: 's-m-5', label: 'plan' },
-        { id: 'e-m-5', source: 's-m-5', target: 's-m-6', label: 'execute' },
-        { id: 'e-m-6', source: 's-m-6', target: 's-m-7', label: 'close' },
-      ],
-    },
-    {
       id: 'proc-emissions-as-is',
       name: 'Flare event to recovery and prevention',
       mode: 'as-is',
@@ -86,7 +58,6 @@ export const downstreamExample: Project = {
     },
   ],
   evidence: [
-    { id: 'ev1', type: 'observation', text: 'Critical flare asset issues are observed in operations but maintenance learning is captured after the work order is closed.' },
     { id: 'ev2', type: 'kpi', text: 'FGRU availability, KOD drainage reliability and critical valve health are reviewed separately from flare event recurrence.' },
     { id: 'ev3', type: 'quote', text: 'We spend too much time finding the right P&ID, relief scenario and tag context before deciding what can be safely changed.', source: 'Engineering lead' },
     { id: 'ev4', type: 'observation', text: 'Flare flow and alarms are visible, but event source attribution by unit, first deviation and relief path is mostly manual.' },
@@ -94,13 +65,6 @@ export const downstreamExample: Project = {
     { id: 'ev6', type: 'kpi', text: 'Recurring flare events are difficult to rank by safety classification, fuel gas recovery opportunity, steam cost, CO2 exposure and production impact.' },
   ],
   pains: [
-    { id: 'p1', code: 'D1', statement: 'Maintenance demand for FGRU, KOD, pilots and key flare auxiliaries is still triggered late, after abnormal operation or inspection findings.', processId: 'proc-maint-as-is', stepId: 's-m-1', stakeholderIds: ['st-maint'], evidenceIds: ['ev1'], severity: 'high', frequency: 4, impact: 5 },
-    { id: 'p2', code: 'D2', statement: 'Operator observations and field notes are transcribed later into the CMMS, creating rework and loss of flare-event context.', processId: 'proc-maint-as-is', stepId: 's-m-2', stakeholderIds: ['st-maint', 'st-ops'], evidenceIds: ['ev1'], severity: 'high', frequency: 5, impact: 4 },
-    { id: 'p3', code: 'D3', statement: 'Work order prioritization does not consistently use flare safety impact, recovery availability or emissions recurrence.', processId: 'proc-maint-as-is', stepId: 's-m-3', stakeholderIds: ['st-maint', 'st-ops'], evidenceIds: ['ev2'], severity: 'critical', frequency: 4, impact: 5 },
-    { id: 'p4', code: 'D4', statement: 'P&IDs, relief scenarios, asset data and as-built information are difficult to find and trust during flare investigations.', processId: 'proc-maint-as-is', stepId: 's-m-4', stakeholderIds: ['st-eng', 'st-maint'], evidenceIds: ['ev3'], severity: 'high', frequency: 4, impact: 4 },
-    { id: 'p5', code: 'D5', statement: 'Spares and field constraints for critical flare assets are checked manually, delaying recovery of safe operating margins.', processId: 'proc-maint-as-is', stepId: 's-m-5', stakeholderIds: ['st-maint'], evidenceIds: ['ev2'], severity: 'medium', frequency: 3, impact: 4 },
-    { id: 'p6', code: 'D6', statement: 'Execution feedback on flare critical assets is captured on paper or photos instead of structured reliability evidence.', processId: 'proc-maint-as-is', stepId: 's-m-6', stakeholderIds: ['st-maint'], evidenceIds: ['ev1'], severity: 'high', frequency: 5, impact: 3 },
-    { id: 'p7', code: 'D7', statement: 'Work closure is weakly connected to flare recurrence, root-cause learning and future safe recovery decisions.', processId: 'proc-maint-as-is', stepId: 's-m-7', stakeholderIds: ['st-maint', 'st-eng'], evidenceIds: ['ev1'], severity: 'medium', frequency: 4, impact: 3 },
     { id: 'p8', code: 'E1', statement: 'Operators can see flare intensity or header flow, but cannot quickly attribute the event to the source unit, relief path, PSV/blowdown or first deviation.', processId: 'proc-emissions-as-is', stepId: 's-e-2', stakeholderIds: ['st-ops', 'st-eng'], evidenceIds: ['ev4'], severity: 'critical', frequency: 5, impact: 5 },
     { id: 'p9', code: 'E2', statement: 'Flare gas composition, NHV, assist steam or air, and combustion quality are not visible in one operational and carbon view.', processId: 'proc-emissions-as-is', stepId: 's-e-3', stakeholderIds: ['st-ops', 'st-env'], evidenceIds: ['ev5'], severity: 'high', frequency: 4, impact: 5 },
     { id: 'p10', code: 'E3', statement: 'Assist steam is managed with conservative margins, creating hidden energy, water treatment and combustion-efficiency cost.', processId: 'proc-emissions-as-is', stepId: 's-e-3', stakeholderIds: ['st-ops', 'st-exec'], evidenceIds: ['ev5'], severity: 'high', frequency: 4, impact: 4 },
@@ -113,9 +77,9 @@ export const downstreamExample: Project = {
   clusters: [
     { id: 'g1', code: 'G1', theme: 'Flare source attribution and first-deviation gap', painIds: ['p8', 'p12'] },
     { id: 'g2', code: 'G2', theme: 'Combustion quality and assist-steam optimization gap', painIds: ['p9', 'p10'] },
-    { id: 'g3', code: 'G3', theme: 'Fragmented engineering, process and asset context', painIds: ['p4', 'p13'] },
-    { id: 'g4', code: 'G4', theme: 'FGRU, KOD and flare critical asset reliability risk', painIds: ['p1', 'p3', 'p5', 'p11'] },
-    { id: 'g5', code: 'G5', theme: 'Manual flare event governance and value prioritization', painIds: ['p2', 'p6', 'p7', 'p14', 'p15'] },
+    { id: 'g3', code: 'G3', theme: 'Fragmented engineering, process and asset context', painIds: ['p13'] },
+    { id: 'g4', code: 'G4', theme: 'FGRU, KOD and flare critical asset reliability risk', painIds: ['p11'] },
+    { id: 'g5', code: 'G5', theme: 'Manual flare event governance and value prioritization', painIds: ['p14', 'p15'] },
   ],
   rootCauses: [
     { id: 'r1', code: 'G1', statement: 'No event-intelligence layer correlates unit process signals, relief paths, header response, alarms and first deviation in near real time.', clusterIds: ['g1'] },
