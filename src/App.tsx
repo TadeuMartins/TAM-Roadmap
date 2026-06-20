@@ -79,7 +79,7 @@ function initiativeMatchesFilters(project: Project, initiative: Initiative, wave
 }
 
 function BrandMark() {
-  return <img className="brand-mark" src="/siemens-logo.png" alt="Siemens" />
+  return <img className="brand-mark" src={`${import.meta.env.BASE_URL}siemens-logo.png`} alt="Siemens" />
 }
 
 interface StepFrameProps {
