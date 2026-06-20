@@ -1,0 +1,18 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #000028;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+#root {
+  min-height: 100vh;
+}
