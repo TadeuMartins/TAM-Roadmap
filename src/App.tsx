@@ -127,14 +127,23 @@ function ProjectHub({ onNew, onDemo, onImport }: ProjectHubProps) {
   return (
     <main className="project-hub">
       <section className="hub-hero">
-        <span className="eyebrow">TAM Roadmap Builder</span>
-        <BrandMark />
-        <h1>Create a roadmap story without losing traceability.</h1>
-        <p>Guided MECE workflow from discovery to pains, root cause, initiatives, financials and executive roadmap/PPT readiness.</p>
+        <div className="hero-brand-lockup">
+          <BrandMark />
+          <span>Digital Transformation Roadmap</span>
+        </div>
+        <span className="eyebrow">Siemens executive roadmap accelerator</span>
+        <h1>Build a board-ready transformation roadmap from operational evidence.</h1>
+        <p>Connect process pains, root causes, Siemens Digital Threads, initiatives and financial impact into one executive story ready for PowerPoint.</p>
         <div className="hub-actions">
           <button className="primary large" onClick={onNew}><Plus size={18} /> New Roadmap</button>
           <button className="large" onClick={onDemo}><RotateCcw size={18} /> Load Downstream Example</button>
           <button className="large" onClick={() => inputRef.current?.click()}><FolderOpen size={18} /> Import JSON</button>
+        </div>
+        <div className="hero-proof-strip">
+          <span>Digital Threads</span>
+          <span>Value case</span>
+          <span>Wave roadmap</span>
+          <span>PPT export</span>
         </div>
         <input ref={inputRef} type="file" accept="application/json" hidden onChange={(event) => {
           const file = event.target.files?.[0]
@@ -142,11 +151,29 @@ function ProjectHub({ onNew, onDemo, onImport }: ProjectHubProps) {
         }} />
       </section>
       <section className="hub-preview-card">
-        <h2>How the workflow stays clean</h2>
-        <div className="hub-steps">
-          {workflowSteps.map((step, index) => <div key={step.id}><b>{index + 1}</b><span>{step.short}</span></div>)}
+        <span className="eyebrow">Transformation narrative</span>
+        <h2>From discovery evidence to executive decisions</h2>
+        <div className="transformation-flow">
+          <article>
+            <b>01</b>
+            <strong>Operational evidence</strong>
+            <span>Process observations, pains and cross-process clusters.</span>
+          </article>
+          <article>
+            <b>02</b>
+            <strong>Siemens response</strong>
+            <span>Root causes mapped to solutions and Digital Threads.</span>
+          </article>
+          <article>
+            <b>03</b>
+            <strong>Investment roadmap</strong>
+            <span>Waves, value case, payback timeline and PPT story.</span>
+          </article>
         </div>
-        <p>Each step unlocks only after the previous one is valid. No free navigation, no hidden dependencies, no polluted workspace.</p>
+        <div className="executive-preview">
+          <small>Executive outputs</small>
+          <p>Roadmap by Wave, Digital Thread view, filtered financials, payback timeline and Siemens-style presentation export.</p>
+        </div>
       </section>
     </main>
   )
