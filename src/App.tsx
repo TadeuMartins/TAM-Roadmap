@@ -194,9 +194,7 @@ function Workspace({ project, setProject, onBack }: WorkspaceProps) {
   const [selectedStepId, setSelectedStepId] = useState<string | undefined>(project.processes[0]?.steps[0]?.id)
   const statuses = workflowStatus(project)
   const activeProcess = project.processes.find((process) => process.id === activeProcessId) || project.processes[0]
-  const financials = totals(project)
   const previewMissing = validatePptReadiness(project)
-  const showFinancialSummary = stepId === 'financials'
 
   const updateProject = (next: Project) => {
     setProject(next)
@@ -333,12 +331,6 @@ function Workspace({ project, setProject, onBack }: WorkspaceProps) {
 
       {blockedNotice.length > 0 && <div className="locked-notice"><strong>Step locked</strong><span>{blockedNotice[0]}</span></div>}
 
-      {showFinancialSummary && <section className="summary-strip">
-        <div><small>Investment</small><strong>{formatMoney(financials.investment, project.currency)}</strong></div>
-        <div><small>Annual benefit</small><strong>{formatMoney(financials.annualBenefit, project.currency)}</strong></div>
-        <div><small>Payback</small><strong>{financials.paybackMonths.toFixed(1)} mo</strong></div>
-        <div><small>Discounted payback</small><strong>{formatDiscountedPayback(financials.discountedPayback)}</strong></div>
-      </section>}
 
       {stepId === 'setup' && <SetupStep project={project} setProject={updateProject} onContinue={goNext} />}
       {stepId === 'stakeholders' && <StakeholdersStep project={project} setProject={updateProject} onContinue={goNext} />}

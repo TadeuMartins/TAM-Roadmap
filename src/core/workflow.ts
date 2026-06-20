@@ -34,7 +34,7 @@ export const workflowSteps: StepDefinition[] = [
   { id: 'rootCause', label: 'Root Cause', short: 'Root', goal: 'Cluster pains and confirm root causes using 5 Whys.' },
   { id: 'solutions', label: 'Solutions', short: 'Solve', goal: 'Map every root cause to concrete solutions and proof KPIs.' },
   { id: 'roadmap', label: 'Initiatives', short: 'Init.', goal: 'Convert solutions into sequenced initiatives before calculating the business case.' },
-  { id: 'financials', label: 'Financials', short: 'Money', goal: 'Quantify investment, benefit, payback and ROI.' },
+  { id: 'financials', label: 'Return', short: 'Return', goal: 'Review annual gains by initiative and edit return assumptions only when needed.' },
   { id: 'preview', label: 'Executive Roadmap', short: 'Roadmap', goal: 'Review the executive roadmap, Digital Thread view and PPT readiness.' },
 ]
 
