@@ -118,11 +118,11 @@ export const downstreamExample: Project = {
     { id: 'g5', code: 'G5', theme: 'Recurrence and unresolved emissions root cause', painIds: ['p11', 'p12', 'p10'] },
   ],
   rootCauses: [
-    { id: 'r1', code: 'R1', statement: 'No real-time asset and emissions health layer connecting condition, process and event signals.', clusterIds: ['g1'] },
-    { id: 'r2', code: 'R2', statement: 'No contextualized industrial data layer linking tags, equipment and emissions semantics.', clusterIds: ['g2'] },
-    { id: 'r3', code: 'R3', statement: 'ESG inventory and field evidence are consolidated manually in batch instead of continuously.', clusterIds: ['g3'] },
-    { id: 'r4', code: 'R4', statement: 'No integrated risk model combines asset criticality, emissions exposure, downtime, material readiness and business impact.', clusterIds: ['g4'] },
-    { id: 'r5', code: 'R5', statement: 'Operations, maintenance, environment and engineering lack a closed-loop emissions event workflow with root-cause analytics.', clusterIds: ['g5'] },
+    { id: 'r1', code: 'G1', statement: 'No real-time asset and emissions health layer connecting condition, process and event signals.', clusterIds: ['g1'] },
+    { id: 'r2', code: 'G2', statement: 'No contextualized industrial data layer linking tags, equipment and emissions semantics.', clusterIds: ['g2'] },
+    { id: 'r3', code: 'G3', statement: 'ESG inventory and field evidence are consolidated manually in batch instead of continuously.', clusterIds: ['g3'] },
+    { id: 'r4', code: 'G4', statement: 'No integrated risk model combines asset criticality, emissions exposure, downtime, material readiness and business impact.', clusterIds: ['g4'] },
+    { id: 'r5', code: 'G5', statement: 'Operations, maintenance, environment and engineering lack a closed-loop emissions event workflow with root-cause analytics.', clusterIds: ['g5'] },
   ],
   fiveWhys: [
     { id: 'fw1', clusterId: 'g1', whys: ['events are detected after failure or abnormal operation', 'asset condition and process signals are not evaluated together', 'emissions and maintenance data are disconnected', 'teams lack early health indicators', 'no real-time asset and emissions health layer exists'], rootCauseId: 'r1' },

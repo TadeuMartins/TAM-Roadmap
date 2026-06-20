@@ -500,8 +500,8 @@ function RootCauseStep({ project, setProject, onContinue }: { project: Project; 
   const whyForCluster = selectedCluster ? project.fiveWhys.find((why) => why.clusterId === selectedCluster.id) : undefined
   const upsertRoot = (statement: string) => {
     if (!selectedCluster) return
-    if (rootForCluster) setProject({ ...project, rootCauses: project.rootCauses.map((root) => root.id === rootForCluster.id ? { ...root, statement } : root) })
-    else setProject({ ...project, rootCauses: [...project.rootCauses, { id: nextId('root', project.rootCauses.length), code: `R${project.rootCauses.length + 1}`, statement, clusterIds: [selectedCluster.id] }] })
+    if (rootForCluster) setProject({ ...project, rootCauses: project.rootCauses.map((root) => root.id === rootForCluster.id ? { ...root, code: selectedCluster.code, statement } : root) })
+    else setProject({ ...project, rootCauses: [...project.rootCauses, { id: nextId('root', project.rootCauses.length), code: selectedCluster.code, statement, clusterIds: [selectedCluster.id] }] })
   }
   return (
     <StepFrame stepId="rootCause" project={project} onContinue={onContinue} primaryLabel="Continue to Solutions">
@@ -516,7 +516,7 @@ function RootCauseStep({ project, setProject, onContinue }: { project: Project; 
               return pain ? <span key={painId}>{pain.code} · {painSource(pain)}</span> : null
             })}</div>
             <FiveWhyEditor project={project} setProject={setProject} clusterId={selectedCluster.id} whyId={whyForCluster?.id} rootCauseId={rootForCluster?.id} />
-            <label>Confirmed root cause<textarea value={rootForCluster?.statement || ''} onChange={(event) => upsertRoot(event.target.value)} placeholder="R1 root cause statement" /></label>
+            <label>Confirmed root cause<textarea value={rootForCluster?.statement || ''} onChange={(event) => upsertRoot(event.target.value)} placeholder={`${selectedCluster.code} root cause statement`} /></label>
             {rootForCluster && <button className="danger icon-button" title="Delete root cause" aria-label="Delete root cause" onClick={() => removeRoot(rootForCluster.id)}><Trash2 size={15} /></button>}
           </> : <p className="empty-state">Create a cluster to start root-cause analysis.</p>}
         </section>

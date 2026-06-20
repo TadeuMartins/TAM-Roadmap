@@ -44,9 +44,10 @@ export function MappingTables({ project, onProjectChange }: MappingTablesProps) 
 
   const addRootCause = () => {
     const id = `root-${project.rootCauses.length + 1}`
+    const cluster = project.clusters[project.rootCauses.length] || project.clusters[0]
     onProjectChange({
       ...project,
-      rootCauses: [...project.rootCauses, { id, code: `R${project.rootCauses.length + 1}`, statement: 'Describe the root cause.', clusterIds: [] }],
+      rootCauses: [...project.rootCauses, { id, code: cluster?.code || `G${project.rootCauses.length + 1}`, statement: 'Describe the root cause.', clusterIds: cluster ? [cluster.id] : [] }],
     })
   }
 
