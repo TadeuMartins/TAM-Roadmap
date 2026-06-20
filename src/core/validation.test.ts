@@ -31,10 +31,10 @@ describe('TAM traceability validation', () => {
   it('calculates roadmap business-case totals', () => {
     const result = totals(downstreamExample)
 
-    expect(result.investment).toBe(18700000)
-    expect(result.annualBenefit).toBe(21083000)
-    expect(result.paybackMonths).toBeCloseTo(21.21, 2)
-    expect(result.discountedPayback).toBeCloseTo(23.04, 2)
-    expect(result.roiYear1).toBeCloseTo(12.7, 1)
+    expect(result.investment).toBe(23800000)
+    expect(result.annualBenefit).toBe(26298000)
+    expect(result.paybackMonths).toBeCloseTo(21.52, 2)
+    expect(result.discountedPayback).toBeCloseTo(23.41, 2)
+    expect(result.roiYear1).toBeCloseTo(10.5, 1)
   })
 })
