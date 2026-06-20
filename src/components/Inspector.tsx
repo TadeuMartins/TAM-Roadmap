@@ -6,9 +6,10 @@ interface InspectorProps {
   process: ProcessMap
   selectedStepId?: string
   onProjectChange: (project: Project) => void
+  onSelectStep: (stepId?: string) => void
 }
 
-export function Inspector({ project, process, selectedStepId, onProjectChange }: InspectorProps) {
+export function Inspector({ project, process, selectedStepId, onProjectChange, onSelectStep }: InspectorProps) {
   const selectedStep = process.steps.find((step) => step.id === selectedStepId) || process.steps[0]
   const stepPains = project.pains.filter((pain) => selectedStep?.painIds.includes(pain.id))
 
@@ -47,6 +48,26 @@ export function Inspector({ project, process, selectedStepId, onProjectChange }:
     onProjectChange({ ...project, processes: updatedProcesses, pains: [...project.pains, pain] })
   }
 
+  const deleteStep = () => {
+    if (!selectedStep || process.steps.length <= 1) return
+    const remainingSteps = process.steps.filter((step) => step.id !== selectedStep.id)
+    const updatedProcesses = project.processes.map((candidate) =>
+      candidate.id === process.id
+        ? {
+          ...candidate,
+          steps: remainingSteps,
+          edges: candidate.edges.filter((edge) => edge.source !== selectedStep.id && edge.target !== selectedStep.id),
+        }
+        : candidate,
+    )
+    onProjectChange({
+      ...project,
+      processes: updatedProcesses,
+      pains: project.pains.map((pain) => pain.stepId === selectedStep.id ? { ...pain, stepId: undefined, processId: undefined } : pain),
+    })
+    onSelectStep(remainingSteps[0]?.id)
+  }
+
   return (
     <aside className="inspector">
       <span className="eyebrow">Step inspector</span>
@@ -74,6 +95,7 @@ export function Inspector({ project, process, selectedStepId, onProjectChange }:
             Notes
             <textarea value={selectedStep.notes || ''} onChange={(event) => patchStep({ notes: event.target.value })} placeholder="What did the TAM observe?" />
           </label>
+          <button className="danger" disabled={process.steps.length <= 1} onClick={deleteStep}>Delete process card</button>
           <div className="inspector-row">
             <strong>Pains on this step</strong>
             <button onClick={addPainToStep}>Add pain</button>

@@ -362,7 +362,7 @@ function Workspace({ project, setProject, onBack }: WorkspaceProps) {
               selectedStepId={selectedStepId}
               onSelectStep={setSelectedStepId}
             />
-            <Inspector project={project} process={activeProcess} selectedStepId={selectedStepId} onProjectChange={updateProject} />
+            <Inspector project={project} process={activeProcess} selectedStepId={selectedStepId} onProjectChange={updateProject} onSelectStep={setSelectedStepId} />
           </div>
         </StepFrame>
       )}
@@ -394,12 +394,22 @@ function SetupStep({ project, setProject, onContinue }: { project: Project; setP
 function StakeholdersStep({ project, setProject, onContinue }: { project: Project; setProject: (project: Project) => void; onContinue: () => void }) {
   const patch = (id: string, patchValue: Partial<Stakeholder>) => setProject({ ...project, stakeholders: project.stakeholders.map((item) => item.id === id ? { ...item, ...patchValue } : item) })
   const add = () => setProject({ ...project, stakeholders: [...project.stakeholders, { id: nextId('stakeholder', project.stakeholders.length), name: '', role: '', area: '', concerns: [] }] })
+  const remove = (id: string) => setProject({
+    ...project,
+    stakeholders: project.stakeholders.filter((stakeholder) => stakeholder.id !== id),
+    pains: project.pains.map((pain) => ({ ...pain, stakeholderIds: pain.stakeholderIds.filter((stakeholderId) => stakeholderId !== id) })),
+    processes: project.processes.map((process) => ({
+      ...process,
+      lanes: process.lanes.map((lane) => lane.stakeholderId === id ? { ...lane, stakeholderId: undefined } : lane),
+    })),
+  })
   return (
     <StepFrame stepId="stakeholders" project={project} onContinue={onContinue} primaryLabel="Continue to Process Map">
       <div className="list-header"><h3>People and roles interviewed</h3><button className="primary" onClick={add}><Plus size={16} /> Add Stakeholder</button></div>
       <div className="card-grid">
         {project.stakeholders.map((stakeholder) => (
           <article className="clean-card" key={stakeholder.id}>
+            <div className="card-actions"><span className="eyebrow">Stakeholder</span><button className="danger" onClick={() => remove(stakeholder.id)}>Delete</button></div>
             <label>Name<input value={stakeholder.name} onChange={(event) => patch(stakeholder.id, { name: event.target.value })} /></label>
             <label>Role<input value={stakeholder.role} onChange={(event) => patch(stakeholder.id, { role: event.target.value })} /></label>
             <label>Area<input value={stakeholder.area} onChange={(event) => patch(stakeholder.id, { area: event.target.value })} /></label>
@@ -415,19 +425,26 @@ function PainsStep({ project, setProject, onContinue }: { project: Project; setP
   const steps = project.processes.flatMap((process) => process.steps.map((step) => ({ ...step, processName: process.name })))
   const patch = (id: string, patchValue: Partial<Pain>) => setProject({ ...project, pains: project.pains.map((pain) => pain.id === id ? { ...pain, ...patchValue } : pain) })
   const add = () => setProject({ ...project, pains: [...project.pains, { id: nextId('pain', project.pains.length), code: `P${project.pains.length + 1}`, statement: '', stakeholderIds: [], evidenceIds: [], severity: 'medium', frequency: 3, impact: 3 }] })
+  const remove = (id: string) => setProject({
+    ...project,
+    pains: project.pains.filter((pain) => pain.id !== id),
+    processes: project.processes.map((process) => ({ ...process, steps: process.steps.map((step) => ({ ...step, painIds: step.painIds.filter((painId) => painId !== id) })) })),
+    clusters: project.clusters.map((cluster) => ({ ...cluster, painIds: cluster.painIds.filter((painId) => painId !== id) })),
+  })
   return (
     <StepFrame stepId="pains" project={project} onContinue={onContinue} primaryLabel="Continue to Root Cause">
       <div className="list-header"><h3>MECE pain inventory</h3><button className="primary" onClick={add}><Plus size={16} /> Add Pain</button></div>
-      <div className="clean-table">
-        <div className="table-row table-head"><span>Code</span><span>Pain statement</span><span>Linked step</span><span>Severity</span><span>Freq</span><span>Impact</span><span>Score</span></div>
+      <div className="clean-table pain-table">
+        <div className="table-row table-head"><span>Code</span><span>Pain statement</span><span>Linked step</span><span>Severity</span><span>Freq</span><span>Impact</span><span>Score</span><span></span></div>
         {project.pains.map((pain) => <div className="table-row" key={pain.id}>
           <input value={pain.code} onChange={(event) => patch(pain.id, { code: event.target.value })} />
-          <input value={pain.statement} onChange={(event) => patch(pain.id, { statement: event.target.value })} />
+          <textarea className="compact-textarea" title={pain.statement} value={pain.statement} onChange={(event) => patch(pain.id, { statement: event.target.value })} />
           <select value={pain.stepId || ''} onChange={(event) => patch(pain.id, { stepId: event.target.value || undefined })}><option value="">Select</option>{steps.map((step) => <option key={step.id} value={step.id}>{step.label} ({step.processName})</option>)}</select>
           <select value={pain.severity} onChange={(event) => patch(pain.id, { severity: event.target.value as Pain['severity'] })}><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option></select>
           <input type="number" value={pain.frequency} onChange={(event) => patch(pain.id, { frequency: Number(event.target.value) })} />
           <input type="number" value={pain.impact} onChange={(event) => patch(pain.id, { impact: Number(event.target.value) })} />
           <strong>{pain.frequency * pain.impact}</strong>
+          <button className="danger icon-button" onClick={() => remove(pain.id)}>Delete</button>
         </div>)}
       </div>
     </StepFrame>
@@ -449,6 +466,36 @@ function RootCauseStep({ project, setProject, onContinue }: { project: Project; 
     setProject({ ...project, clusters: [...project.clusters, cluster] })
     setSelectedClusterId(cluster.id)
   }
+  const removeCluster = (id: string) => {
+    const rootIdsToRemove = project.rootCauses.filter((root) => root.clusterIds.includes(id) && root.clusterIds.length <= 1).map((root) => root.id)
+    setProject({
+      ...project,
+      clusters: project.clusters.filter((cluster) => cluster.id !== id),
+      fiveWhys: project.fiveWhys.filter((why) => why.clusterId !== id && !rootIdsToRemove.includes(why.rootCauseId)),
+      rootCauses: project.rootCauses
+        .filter((root) => !rootIdsToRemove.includes(root.id))
+        .map((root) => ({ ...root, clusterIds: root.clusterIds.filter((clusterId) => clusterId !== id) })),
+      solutions: project.solutions.filter((solution) => !solution.rootCauseIds.some((rootId) => rootIdsToRemove.includes(rootId))),
+      initiatives: project.initiatives.map((initiative) => ({
+        ...initiative,
+        solutionIds: initiative.solutionIds.filter((solutionId) => {
+          const solution = project.solutions.find((candidate) => candidate.id === solutionId)
+          return solution ? !solution.rootCauseIds.some((rootId) => rootIdsToRemove.includes(rootId)) : true
+        }),
+      })),
+    })
+    setSelectedClusterId(project.clusters.find((cluster) => cluster.id !== id)?.id || '')
+  }
+  const removeRoot = (id: string) => {
+    const solutionIdsToRemove = project.solutions.filter((solution) => solution.rootCauseIds.includes(id)).map((solution) => solution.id)
+    setProject({
+      ...project,
+      rootCauses: project.rootCauses.filter((root) => root.id !== id),
+      fiveWhys: project.fiveWhys.filter((why) => why.rootCauseId !== id),
+      solutions: project.solutions.filter((solution) => !solution.rootCauseIds.includes(id)),
+      initiatives: project.initiatives.map((initiative) => ({ ...initiative, solutionIds: initiative.solutionIds.filter((solutionId) => !solutionIdsToRemove.includes(solutionId)) })),
+    })
+  }
   const rootForCluster = selectedCluster ? project.rootCauses.find((root) => root.clusterIds.includes(selectedCluster.id)) : undefined
   const whyForCluster = selectedCluster ? project.fiveWhys.find((why) => why.clusterId === selectedCluster.id) : undefined
   const upsertRoot = (statement: string) => {
@@ -459,7 +506,7 @@ function RootCauseStep({ project, setProject, onContinue }: { project: Project; 
   return (
     <StepFrame stepId="rootCause" project={project} onContinue={onContinue} primaryLabel="Continue to Solutions">
       <div className="split-workspace">
-        <aside className="clean-list"><div className="list-header"><h3>Clusters</h3><button onClick={addCluster}>Add</button></div>{project.clusters.map((cluster) => <button className={cluster.id === selectedCluster?.id ? 'selected-list-item' : ''} key={cluster.id} onClick={() => setSelectedClusterId(cluster.id)}><b>{cluster.code}</b><span>{cluster.theme}</span></button>)}</aside>
+        <aside className="clean-list"><div className="list-header"><h3>Clusters</h3><button onClick={addCluster}>Add</button></div>{project.clusters.map((cluster) => <div className={`list-item-with-action ${cluster.id === selectedCluster?.id ? 'selected-list-item' : ''}`} key={cluster.id}><button onClick={() => setSelectedClusterId(cluster.id)}><b>{cluster.code}</b><span>{cluster.theme}</span></button><button className="danger" onClick={() => removeCluster(cluster.id)}>Delete</button></div>)}</aside>
         <section className="detail-panel">
           {selectedCluster ? <>
             <label>Cluster theme<input value={selectedCluster.theme} onChange={(event) => patchCluster(selectedCluster.id, { theme: event.target.value })} /></label>
@@ -470,6 +517,7 @@ function RootCauseStep({ project, setProject, onContinue }: { project: Project; 
             })}</div>
             <FiveWhyEditor project={project} setProject={setProject} clusterId={selectedCluster.id} whyId={whyForCluster?.id} rootCauseId={rootForCluster?.id} />
             <label>Confirmed root cause<textarea value={rootForCluster?.statement || ''} onChange={(event) => upsertRoot(event.target.value)} placeholder="R1 root cause statement" /></label>
+            {rootForCluster && <button className="danger" onClick={() => removeRoot(rootForCluster.id)}>Delete root cause</button>}
           </> : <p className="empty-state">Create a cluster to start root-cause analysis.</p>}
         </section>
       </div>
@@ -486,25 +534,31 @@ function FiveWhyEditor({ project, setProject, clusterId, whyId, rootCauseId }: {
     if (why) setProject({ ...project, fiveWhys: project.fiveWhys.map((item) => item.id === why.id ? { ...item, whys: nextWhys } : item) })
     else setProject({ ...project, fiveWhys: [...project.fiveWhys, { id: nextId('why', project.fiveWhys.length), clusterId, rootCauseId: rootCauseId || '', whys: nextWhys }] })
   }
-  return <div className="why-ladder">{[0, 1, 2, 3, 4].map((index) => <label key={index}>Why {index + 1}<input value={whys[index] || ''} onChange={(event) => update(index, event.target.value)} /></label>)}</div>
+  return <div className="why-ladder">{[0, 1, 2, 3, 4].map((index) => <label key={index}>Why {index + 1}<textarea className="compact-textarea" title={whys[index] || ''} value={whys[index] || ''} onChange={(event) => update(index, event.target.value)} /></label>)}</div>
 }
 
 function SolutionsStep({ project, setProject, onContinue }: { project: Project; setProject: (project: Project) => void; onContinue: () => void }) {
   const patch = (id: string, patchValue: Partial<Solution>) => setProject({ ...project, solutions: project.solutions.map((solution) => solution.id === id ? { ...solution, ...patchValue } : solution) })
   const addForRoot = (rootId: string) => setProject({ ...project, solutions: [...project.solutions, { id: nextId('solution', project.solutions.length), code: `S${project.solutions.length + 1}`, statement: '', rootCauseIds: [rootId], productHints: [], proofKpi: '', digitalThread: 'Integrated Lifecycle Management' }] })
+  const remove = (id: string) => setProject({
+    ...project,
+    solutions: project.solutions.filter((solution) => solution.id !== id),
+    initiatives: project.initiatives.map((initiative) => ({ ...initiative, solutionIds: initiative.solutionIds.filter((solutionId) => solutionId !== id) })),
+  })
   return (
     <StepFrame stepId="solutions" project={project} onContinue={onContinue} primaryLabel="Continue to Roadmap">
       <div className="chain-list">
         {project.rootCauses.map((root) => <article className="chain-card" key={root.id}>
           <header><b>{root.code}</b><span>{root.statement}</span><button onClick={() => addForRoot(root.id)}>Add solution</button></header>
           {project.solutions.filter((solution) => solution.rootCauseIds.includes(root.id)).map((solution) => <div className="solution-line" key={solution.id}>
-            <input value={solution.statement} placeholder="Concrete solution" onChange={(event) => patch(solution.id, { statement: event.target.value })} />
+            <textarea className="compact-textarea" title={solution.statement} value={solution.statement} placeholder="Concrete solution" onChange={(event) => patch(solution.id, { statement: event.target.value })} />
             <select value={solution.digitalThread || ''} onChange={(event) => patch(solution.id, { digitalThread: event.target.value as DigitalThread })}>
               <option value="">Select Digital Thread</option>
               {digitalThreads.map((thread) => <option key={thread.id} value={thread.id}>{thread.short} - {thread.id}</option>)}
             </select>
-            <input value={solution.proofKpi} placeholder="Success metric / KPI" onChange={(event) => patch(solution.id, { proofKpi: event.target.value })} />
+            <textarea className="compact-textarea" title={solution.proofKpi} value={solution.proofKpi} placeholder="Success metric / KPI" onChange={(event) => patch(solution.id, { proofKpi: event.target.value })} />
             <select value={solution.initiativeId || ''} onChange={(event) => patch(solution.id, { initiativeId: event.target.value || undefined })}><option value="">No initiative</option>{project.initiatives.map((initiative) => <option key={initiative.id} value={initiative.id}>{initiative.code} - {initiative.name}</option>)}</select>
+            <button className="danger icon-button" title="Delete solution" onClick={() => remove(solution.id)}>Delete</button>
           </div>)}
         </article>)}
       </div>
@@ -526,6 +580,25 @@ function RoadmapStep({ project, setProject, onContinue }: { project: Project; se
     setProject({ ...project, initiatives: [...project.initiatives, initiative] })
     setSelectedInitiativeId(initiative.id)
   }
+  const removeInitiative = (id: string) => {
+    const remaining = project.initiatives.filter((initiative) => initiative.id !== id)
+    setProject({
+      ...project,
+      initiatives: remaining,
+      solutions: project.solutions.map((solution) => solution.initiativeId === id ? { ...solution, initiativeId: undefined } : solution),
+    })
+    setSelectedInitiativeId(remaining[0]?.id || '')
+  }
+  const removeWave = (id: string) => {
+    if (project.waves.length <= 1) return
+    const fallbackWave = project.waves.find((wave) => wave.id !== id)
+    if (!fallbackWave) return
+    setProject({
+      ...project,
+      waves: project.waves.filter((wave) => wave.id !== id),
+      initiatives: project.initiatives.map((initiative) => initiative.waveId === id ? { ...initiative, waveId: fallbackWave.id } : initiative),
+    })
+  }
   const selected = project.initiatives.find((initiative) => initiative.id === selectedInitiativeId)
   return (
     <StepFrame stepId="roadmap" project={project} onContinue={onContinue} primaryLabel="Continue to Financials">
@@ -545,6 +618,7 @@ function RoadmapStep({ project, setProject, onContinue }: { project: Project; se
               <label>Label<input value={wave.label} onChange={(event) => patchWave(wave.id, { label: event.target.value })} /></label>
               <label>Title<input value={wave.title} onChange={(event) => patchWave(wave.id, { title: event.target.value })} /></label>
               <label>Horizon<input value={wave.horizon} onChange={(event) => patchWave(wave.id, { horizon: event.target.value })} /></label>
+              <button className="danger icon-button" disabled={project.waves.length <= 1} onClick={() => removeWave(wave.id)}>Delete wave</button>
             </header>
             {project.initiatives.filter((initiative) => initiative.waveId === wave.id).map((initiative) => (
               <button
@@ -572,6 +646,7 @@ function RoadmapStep({ project, setProject, onContinue }: { project: Project; se
             <label>Wave<select value={selected.waveId} onChange={(event) => patch(selected.id, { waveId: event.target.value })}>{project.waves.map((wave) => <option key={wave.id} value={wave.id}>{wave.label} - {wave.title}</option>)}</select></label>
             <label>Return starts after (months)<input type="number" value={normalizeBenefitModel(selected.benefitModel).benefitStartMonth} onChange={(event) => patchBenefit(selected, { benefitStartMonth: Number(event.target.value) })} /></label>
             <label>Linked solutions<select multiple value={selected.solutionIds} onChange={(event) => patch(selected.id, { solutionIds: Array.from(event.target.selectedOptions).map((option) => option.value) })}>{project.solutions.map((solution) => <option key={solution.id} value={solution.id}>{solution.code} - {solution.statement}</option>)}</select></label>
+            <button className="danger" onClick={() => removeInitiative(selected.id)}>Delete initiative</button>
           </> : <p className="empty-state">Select an initiative to edit details.</p>}
         </aside>
       </div>
