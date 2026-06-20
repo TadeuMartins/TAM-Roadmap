@@ -6,6 +6,7 @@ import { SwimlaneEditor } from './components/SwimlaneEditor'
 import { digitalThreads } from './core/digitalThreads'
 import { emptyBenefitModel, formatDiscountedPayback, initiativeFinancials, normalizeBenefitModel, projectCashflowTimeline } from './core/financial'
 import { initiativeBubble, initiativesByThread, initiativeThread, threadShort } from './core/roadmapViews'
+import { siemensPortfolioOptions } from './core/siemensPortfolio'
 import type { BenefitModel, Cluster, DigitalThread, FinancialAssumptions, Initiative, Pain, ProcessMap, Project, Solution, Stakeholder } from './core/types'
 import { totals } from './core/validation'
 import {
@@ -568,7 +569,7 @@ function RoadmapStep({ project, setProject, onContinue }: { project: Project; se
   const patchWave = (id: string, patchValue: Partial<Project['waves'][number]>) => setProject({ ...project, waves: project.waves.map((wave) => wave.id === id ? { ...wave, ...patchValue } : wave) })
   const addWave = () => setProject({ ...project, waves: [...project.waves, { id: nextId('wave', project.waves.length), label: `Wave ${project.waves.length + 1}`, title: 'New wave', horizon: 'TBD' }] })
   const add = (waveId: string) => {
-    const initiative = { id: nextId('initiative', project.initiatives.length), code: `I${project.initiatives.length + 1}`, name: 'New initiative', objective: 'Describe the initiative outcome.', waveId, workstreamIds: [], solutionIds: [], kpis: [], investment: 0, annualBenefit: 0, benefitModel: benefitModelWithDefaults(project), assumptions: [], benefitLogic: '' }
+    const initiative = { id: nextId('initiative', project.initiatives.length), code: `I${project.initiatives.length + 1}`, name: 'New initiative', objective: 'Describe the initiative outcome.', waveId, workstreamIds: [], solutionIds: [], kpis: [], siemensSolutionsRelated: [], investment: 0, annualBenefit: 0, benefitModel: benefitModelWithDefaults(project), assumptions: [], benefitLogic: '' }
     setProject({ ...project, initiatives: [...project.initiatives, initiative] })
     setSelectedInitiativeId(initiative.id)
   }
@@ -635,6 +636,7 @@ function RoadmapStep({ project, setProject, onContinue }: { project: Project; se
             <label>Name<input value={selected.name} placeholder="Initiative name" onChange={(event) => patch(selected.id, { name: event.target.value })} /></label>
             <label>Objective<textarea value={selected.objective} placeholder="Objective" onChange={(event) => patch(selected.id, { objective: event.target.value })} /></label>
             <label>KPIs<input value={selected.kpis.join(', ')} placeholder="KPIs" onChange={(event) => patch(selected.id, { kpis: splitList(event.target.value) })} /></label>
+            <label>Siemens Solutions Related<select multiple value={selected.siemensSolutionsRelated || []} onChange={(event) => patch(selected.id, { siemensSolutionsRelated: Array.from(event.target.selectedOptions).map((option) => option.value) })}>{siemensPortfolioOptions.map((solution) => <option key={solution} value={solution}>{solution}</option>)}</select></label>
             <label>Wave<select value={selected.waveId} onChange={(event) => patch(selected.id, { waveId: event.target.value })}>{project.waves.map((wave) => <option key={wave.id} value={wave.id}>{wave.label} - {wave.title}</option>)}</select></label>
             <label>Return starts after (months)<input type="number" value={normalizeBenefitModel(selected.benefitModel).benefitStartMonth} onChange={(event) => patchBenefit(selected, { benefitStartMonth: Number(event.target.value) })} /></label>
             <label>Linked solutions<select multiple value={selected.solutionIds} onChange={(event) => patch(selected.id, { solutionIds: Array.from(event.target.selectedOptions).map((option) => option.value) })}>{project.solutions.map((solution) => <option key={solution.id} value={solution.id}>{solution.code} - {solution.statement}</option>)}</select></label>

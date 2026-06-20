@@ -131,6 +131,7 @@ export interface Initiative {
   workstreamIds: string[]
   solutionIds: string[]
   kpis: string[]
+  siemensSolutionsRelated?: string[]
   investment: number
   annualBenefit: number
   benefitModel?: BenefitModel
