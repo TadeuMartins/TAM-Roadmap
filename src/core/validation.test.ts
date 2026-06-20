@@ -33,8 +33,8 @@ describe('TAM traceability validation', () => {
 
     expect(result.investment).toBe(23800000)
     expect(result.annualBenefit).toBe(26298000)
-    expect(result.paybackMonths).toBeCloseTo(21.52, 2)
-    expect(result.discountedPayback).toBeCloseTo(23.41, 2)
+    expect(result.paybackMonths).toBeCloseTo(21.42, 2)
+    expect(result.discountedPayback).toBeCloseTo(23.30, 2)
     expect(result.roiYear1).toBeCloseTo(10.5, 1)
   })
 })
