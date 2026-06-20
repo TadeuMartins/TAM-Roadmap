@@ -161,12 +161,12 @@ function ProjectHub({ onNew, onDemo, onImport }: ProjectHubProps) {
           </article>
           <article>
             <b>02</b>
-            <strong>Siemens response</strong>
-            <span>Root causes mapped to solutions and Digital Threads.</span>
+            <strong>Solution Oriented Analysis</strong>
+            <span>Root causes translated into solution themes and Digital Threads.</span>
           </article>
           <article>
             <b>03</b>
-            <strong>Investment roadmap</strong>
+            <strong>Transformational Roadmap</strong>
             <span>Waves, value case, payback timeline and PPT story.</span>
           </article>
         </div>
