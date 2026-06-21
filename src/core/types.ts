@@ -132,6 +132,7 @@ export interface Initiative {
   solutionIds: string[]
   kpis: string[]
   siemensSolutionsRelated?: string[]
+  softwareArchitecture?: string[]
   investment: number
   annualBenefit: number
   benefitModel?: BenefitModel

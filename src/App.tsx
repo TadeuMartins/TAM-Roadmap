@@ -37,6 +37,10 @@ function splitList(value: string) {
   return value.split(/[;,\n]/).map((item) => item.trim()).filter(Boolean)
 }
 
+function splitLines(value: string) {
+  return value.split(/\n/).map((item) => item.trim()).filter(Boolean)
+}
+
 function formatMoney(value: number, currency = 'BRL') {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency, maximumFractionDigits: 0 }).format(value)
 }
@@ -637,6 +641,7 @@ function RoadmapStep({ project, setProject, onContinue }: { project: Project; se
             <label>Objective<textarea value={selected.objective} placeholder="Objective" onChange={(event) => patch(selected.id, { objective: event.target.value })} /></label>
             <label>KPIs<input value={selected.kpis.join(', ')} placeholder="KPIs" onChange={(event) => patch(selected.id, { kpis: splitList(event.target.value) })} /></label>
             <label>Siemens Solutions Related<select multiple value={selected.siemensSolutionsRelated || []} onChange={(event) => patch(selected.id, { siemensSolutionsRelated: Array.from(event.target.selectedOptions).map((option) => option.value) })}>{siemensPortfolioOptions.map((solution) => <option key={solution} value={solution}>{solution}</option>)}</select></label>
+            <label>Siemens software architecture<textarea value={(selected.softwareArchitecture || []).join('\n')} placeholder="One architecture component per line" onChange={(event) => patch(selected.id, { softwareArchitecture: splitLines(event.target.value) })} /></label>
             <label>Wave<select value={selected.waveId} onChange={(event) => patch(selected.id, { waveId: event.target.value })}>{project.waves.map((wave) => <option key={wave.id} value={wave.id}>{wave.label} - {wave.title}</option>)}</select></label>
             <label>Return starts after (months)<input type="number" value={normalizeBenefitModel(selected.benefitModel).benefitStartMonth} onChange={(event) => patchBenefit(selected, { benefitStartMonth: Number(event.target.value) })} /></label>
             <label>Linked solutions<select multiple value={selected.solutionIds} onChange={(event) => patch(selected.id, { solutionIds: Array.from(event.target.selectedOptions).map((option) => option.value) })}>{project.solutions.map((solution) => <option key={solution.id} value={solution.id}>{solution.code} - {solution.statement}</option>)}</select></label>

@@ -219,6 +219,19 @@ function addDigitalThreadStrategySlide(pptx: pptxgen, project: Project, currency
   })
 }
 
+function addInitiativeArchitectureSlide(pptx: pptxgen, project: Project) {
+  const slide = pptx.addSlide()
+  addTitle(slide, 'Siemens software architecture by initiative', 'Which Siemens components are used and what role each one plays')
+  project.initiatives.slice(0, 6).forEach((initiative, index) => {
+    const x = index % 2 === 0 ? 0.55 : 6.75
+    const y = 1.42 + Math.floor(index / 2) * 1.66
+    const architecture = initiative.softwareArchitecture?.length
+      ? initiative.softwareArchitecture
+      : initiative.siemensSolutionsRelated?.map((solution) => `${solution}: architecture role to be defined`) || []
+    card(slide, x, y, 5.75, 1.28, `${initiative.code} ${initiative.name}`, architecture.join('\n'), index % 2 === 0 ? CYAN : PETROL)
+  })
+}
+
 function addRoadmapMatrix(slide: pptxgen.Slide, project: Project) {
   slide.addShape(RECT, { x: 0.45, y: 1.28, w: 8.15, h: 5.35, fill: { color: PANEL2 }, line: { color: LINE } })
   slide.addShape(RECT, { x: 4.52, y: 1.28, w: 0.01, h: 5.35, fill: { color: LINE }, line: { color: LINE } })
@@ -398,6 +411,8 @@ export async function exportProjectPptx(project: Project) {
     slide.addText(`${f.paybackMonths.toFixed(1)} mo`, { x: 8.8, y, w: 0.9, h: 0.2, fontSize: 7.5, color: CYAN, margin: 0 })
     slide.addText(formatDiscountedPayback(f.discountedPayback), { x: 10.05, y, w: 1.0, h: 0.2, fontSize: 7.5, color: CYAN, margin: 0 })
   })
+
+  addInitiativeArchitectureSlide(pptx, project)
 
   slide = pptx.addSlide()
   addTitle(slide, 'Executive roadmap matrix', 'Value vs. implementation effort after financial quantification')
