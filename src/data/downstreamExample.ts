@@ -33,7 +33,7 @@ export const downstreamExample: Project = {
         { id: 'lane-em-exec', label: 'Executive Management', ownerType: 'role', stakeholderId: 'st-exec' },
       ],
       steps: [
-        { id: 's-e-1', label: 'Process upset sends gas to relief system', laneId: 'lane-em-ops', kind: 'activity', x: 70, y: 28, system: 'DCS / SIS / ESD', painIds: ['p8', 'p14'] },
+        { id: 's-e-1', label: 'Process upset sends gas to relief system', laneId: 'lane-em-ops', kind: 'activity', x: 70, y: 28, system: 'DCS', painIds: ['p8', 'p14'] },
         { id: 's-e-2', label: 'Header pressure and flare flow rise', laneId: 'lane-em-flare', kind: 'system', x: 265, y: 28, system: 'DCS / historian', painIds: ['p8', 'p11'] },
         { id: 's-e-3', label: 'Check KOD, pilots, ignitors and assist steam', laneId: 'lane-em-flare', kind: 'decision', x: 460, y: 28, system: 'Local panels / DCS', painIds: ['p9', 'p10', 'p11'] },
         { id: 's-e-4', label: 'Estimate gas, steam and emissions manually', laneId: 'lane-em-env', kind: 'activity', x: 655, y: 28, system: 'Manual factors / spreadsheets', painIds: ['p9', 'p13'] },
