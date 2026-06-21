@@ -31,7 +31,7 @@ textarea.compact-textarea { min-height: 58px; }
 input:focus, select:focus, textarea:focus { outline: 2px solid rgba(0, 190, 220, .2); border-color: var(--cyan); }
 h1, h2, h3, p { margin: 0; }
 .eyebrow { color: var(--cyan); font-size: 11px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
-.brand-mark { display: inline-block; width: 78px; height: auto; object-fit: contain; opacity: .9; }
+.brand-mark { display: inline-block; width: 110px; height: auto; object-fit: contain; opacity: .9; }
 
 .project-hub { min-height: 100vh; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(360px, .75fr); gap: 28px; align-items: center; padding: 56px; background:
   radial-gradient(circle at 18% 18%, rgba(0, 190, 220, .28), transparent 30rem),
