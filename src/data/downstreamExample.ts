@@ -4,7 +4,7 @@ export const downstreamExample: Project = {
   id: 'smart-flare-2-refinery-demo',
   name: 'Smart Flare 2.0 Digital Transformation Roadmap',
   industry: 'Downstream oil & gas',
-  client: 'Client X',
+  client: 'Client X Energy',
   objective: 'Evolve refinery flare management from combustion monitoring to event intelligence, root-cause prevention, carbon/value governance and a quantified future recovery business case.',
   currency: 'BRL',
   horizon: '30 months',
@@ -12,12 +12,12 @@ export const downstreamExample: Project = {
   timelineView: 'years',
   financialAssumptions: { waccPercent: 12, benefitYears: 5 },
   stakeholders: [
-    { id: 'st-maint', name: 'Maintenance lead', role: 'Maintenance & Reliability', area: 'Refinery operations', concerns: ['KOD pumps and valves', 'pilots and ignitors', 'recurring corrective work'] },
-    { id: 'st-eng', name: 'Engineering lead', role: 'Engineering & Process Safety', area: 'Relief systems and asset lifecycle', concerns: ['P&ID and tag context', 'relief scenarios', 'flare root-cause recurrence'] },
-    { id: 'st-ops', name: 'Operations lead', role: 'Operations', area: 'Control room and utilities', concerns: ['flare source attribution', 'header pressure', 'assist steam optimization'] },
-    { id: 'st-env', name: 'Environment lead', role: 'Environment & Carbon', area: 'MRV and ESG reporting', concerns: ['event-level emissions', 'audit traceability', 'routine versus safety flaring'] },
-    { id: 'st-safety', name: 'Process safety lead', role: 'Process Safety', area: 'SIS, ESD and relief integrity', concerns: ['independent safety layers', 'PSV and blowdown integrity', 'safe recovery limits'] },
-    { id: 'st-exec', name: 'Executive sponsor', role: 'Executive Management', area: 'Capital allocation', concerns: ['safe emissions reduction', 'energy loss', 'CO2 and financial exposure'] },
+    { id: 'st-maint', name: 'João X', role: 'Maintenance & Reliability Lead', area: 'Refinery operations', concerns: ['KOD pumps and valves', 'pilots and ignitors', 'recurring corrective work'] },
+    { id: 'st-eng', name: 'Marcos Y', role: 'Engineering & Process Safety Lead', area: 'Relief systems and asset lifecycle', concerns: ['P&ID and tag context', 'relief scenarios', 'flare root-cause recurrence'] },
+    { id: 'st-ops', name: 'Felipe Z', role: 'Operations Lead', area: 'Control room and utilities', concerns: ['flare source attribution', 'header pressure', 'assist steam optimization'] },
+    { id: 'st-env', name: 'XPTO Junior', role: 'Environment & Carbon Lead', area: 'MRV and ESG reporting', concerns: ['event-level emissions', 'audit traceability', 'routine versus safety flaring'] },
+    { id: 'st-safety', name: 'Fabio X', role: 'Process Safety Lead', area: 'SIS, ESD and relief integrity', concerns: ['independent safety layers', 'PSV and blowdown integrity', 'safe recovery limits'] },
+    { id: 'st-exec', name: 'Ricardo Y', role: 'Executive Management', area: 'Capital allocation', concerns: ['safe emissions reduction', 'energy loss', 'CO2 and financial exposure'] },
   ],
   processes: [
     {
