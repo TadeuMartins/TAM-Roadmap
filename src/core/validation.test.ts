@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { downstreamExample } from '../data/downstreamExample'
+import { refapAssetTurnaroundAssessment as downstreamExample } from '../data/downstreamExample'
 import { totals, traceabilityCoverage, validateProject } from './validation'
 
 describe('TAM traceability validation', () => {
