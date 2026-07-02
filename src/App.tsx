@@ -141,7 +141,7 @@ function ProjectHub({ onNew, onDemo, onImport }: ProjectHubProps) {
         <p>Connect process pains, root causes, Siemens Digital Threads, initiatives and financial impact into one executive story ready for PowerPoint.</p>
         <div className="hub-actions">
           <button className="primary large" onClick={onNew}><Plus size={18} /> New Roadmap</button>
-          <button className="large" onClick={onDemo}><RotateCcw size={18} /> Load Downstream Example</button>
+          <button className="large" onClick={onDemo}><RotateCcw size={18} /> Carregar Exemplo Downstream</button>
           <button className="large" onClick={() => inputRef.current?.click()}><FolderOpen size={18} /> Import JSON</button>
         </div>
         <div className="hero-proof-strip">
