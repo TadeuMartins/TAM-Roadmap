@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { blankProject, refapAssetTurnaroundAssessment as downstreamExample } from '../data/downstreamExample'
+import { blankProject, downstreamExample } from '../data/downstreamExample'
 import { firstIncompleteStep, validatePptReadiness, workflowStatus } from './workflow'
 
 describe('MECE workflow gatekeeping', () => {

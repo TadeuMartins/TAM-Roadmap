@@ -8,7 +8,7 @@ import type { Project } from '../core/types'
  * validated in the discovery/MVP phase with REFAP operational, SAP, Primavera,
  * COMOS and financial data.
  */
-export const refapAssetTurnaroundAssessment: Project = {
+export const downstreamExample: Project = {
   id: 'refap-asset-performance-turnaround-assessment',
   name: 'REFAP Asset Performance & Turnaround Digital Thread',
   industry: 'Downstream oil & gas',

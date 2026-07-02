@@ -17,7 +17,7 @@ import {
   workflowSteps,
   type WorkflowStepId,
 } from './core/workflow'
-import { blankProject, refapAssetTurnaroundAssessment } from './data/downstreamExample'
+import { blankProject, downstreamExample } from './data/downstreamExample'
 
 function downloadJson(project: Project) {
   const blob = new Blob([JSON.stringify(project, null, 2)], { type: 'application/json' })
@@ -911,7 +911,7 @@ function PreviewStep({ project, setProject }: { project: Project; setProject: (p
 function App() {
   const [project, setProject] = useState<Project | null>(null)
   const importProject = async (file: File) => setProject(JSON.parse(await file.text()) as Project)
-  if (!project) return <ProjectHub onNew={() => setProject(blankProject())} onDemo={() => setProject(refapAssetTurnaroundAssessment)} onImport={(file) => void importProject(file)} />
+  if (!project) return <ProjectHub onNew={() => setProject(blankProject())} onDemo={() => setProject(downstreamExample)} onImport={(file) => void importProject(file)} />
   return <Workspace project={project} setProject={setProject} onBack={() => setProject(null)} />
 }
 
