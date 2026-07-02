@@ -134,21 +134,21 @@ function ProjectHub({ onNew, onDemo, onImport }: ProjectHubProps) {
       <section className="hub-hero">
         <div className="hero-brand-lockup">
           <BrandMark />
-          <span>Digital Transformation Roadmap</span>
+          <span>Roadmap de Transformação Digital</span>
         </div>
-        <span className="eyebrow">Siemens executive roadmap accelerator</span>
-        <h1>Build a board-ready transformation roadmap from operational evidence.</h1>
-        <p>Connect process pains, root causes, Siemens Digital Threads, initiatives and financial impact into one executive story ready for PowerPoint.</p>
+        <span className="eyebrow">Acelerador Siemens de roadmap executivo</span>
+        <h1>Construa um roadmap de transformação pronto para o conselho a partir de evidências operacionais.</h1>
+        <p>Conecte dores de processo, causas raiz, Siemens Digital Threads, iniciativas e impacto financeiro em uma narrativa executiva pronta para PowerPoint.</p>
         <div className="hub-actions">
           <button className="primary large" onClick={onNew}><Plus size={18} /> New Roadmap</button>
-          <button className="large" onClick={onDemo}><RotateCcw size={18} /> Carregar Exemplo Downstream</button>
+          <button className="large" onClick={onDemo}><RotateCcw size={18} /> Load Downstream Example</button>
           <button className="large" onClick={() => inputRef.current?.click()}><FolderOpen size={18} /> Import JSON</button>
         </div>
         <div className="hero-proof-strip">
           <span>Digital Threads</span>
-          <span>Value case</span>
-          <span>Wave roadmap</span>
-          <span>PPT export</span>
+          <span>Caso de valor</span>
+          <span>Roadmap por ondas</span>
+          <span>Exportação PPT</span>
         </div>
         <input ref={inputRef} type="file" accept="application/json" hidden onChange={(event) => {
           const file = event.target.files?.[0]
@@ -156,28 +156,28 @@ function ProjectHub({ onNew, onDemo, onImport }: ProjectHubProps) {
         }} />
       </section>
       <section className="hub-preview-card">
-        <span className="eyebrow">Transformation narrative</span>
-        <h2>From discovery evidence to executive decisions</h2>
+        <span className="eyebrow">Narrativa de transformação</span>
+        <h2>Das evidências de descoberta às decisões executivas</h2>
         <div className="transformation-flow">
           <article>
             <b>01</b>
-            <strong>Operational evidence</strong>
-            <span>Process observations, pains and cross-process clusters.</span>
+            <strong>Evidências operacionais</strong>
+            <span>Observações de processo, dores e agrupamentos entre processos.</span>
           </article>
           <article>
             <b>02</b>
-            <strong>Solution Oriented Analysis</strong>
-            <span>Root causes translated into solution themes and Digital Threads.</span>
+            <strong>Análise orientada a soluções</strong>
+            <span>Causas raiz traduzidas em temas de solução e Digital Threads.</span>
           </article>
           <article>
             <b>03</b>
-            <strong>Transformational Roadmap</strong>
-            <span>Waves, value case, payback timeline and PPT story.</span>
+            <strong>Roadmap transformacional</strong>
+            <span>Ondas, caso de valor, linha do tempo de payback e narrativa PPT.</span>
           </article>
         </div>
         <div className="executive-preview">
-          <small>Executive outputs</small>
-          <p>Roadmap by Wave, Digital Thread view, filtered financials, payback timeline and Siemens-style presentation export.</p>
+          <small>Entregáveis executivos</small>
+          <p>Roadmap por onda, visão por Digital Thread, financeiros filtrados, linha do tempo de payback e exportação de apresentação no estilo Siemens.</p>
         </div>
       </section>
     </main>
